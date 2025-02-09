@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Quote Generator - Occult Edition</title>
+<style>
+/* Global Styles */
+body {
+  font-family: 'Garamond', serif;
+  text-align: center;
+  background-color: #1e1b1b;
+  color: #f5e6e2;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 3rem;
+  color: #9b59b6;
+  text-shadow: 0 0 15px #9b59b6, 0 0 30px #9b59b6;
+  margin-bottom: 20px;
+}
+
+#quoteDisplay {
+  margin: 20px;
+  font-size: 2rem;
+  color: #fff;
+  border: 1px solid #9b59b6;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+#author {
+  font-style: italic;
+  color: #dcdcdc;
+  margin-top: 10px;
+}
+
+button {
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  background-color: #9b59b6;
+  color: white;
+  border: 2px solid #9b59b6;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform 0.2s, background-color 0.2s;
+  text-transform: uppercase;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+button:hover {
+  background-color: #8e44ad;
+  transform: scale(1.1);
+}
+
+button:active {
+  background-color: #6c3483;
+}
+
+.social-buttons {
+  margin-top: 20px;
+}
+
+.social-buttons a {
+  text-decoration: none;
+  margin: 10px;
+}
+
+.social-buttons img {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.2s;
+}
+
+.social-buttons img:hover {
+  transform: scale(1.2);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>Random Quote Generator</h1>
+
+<div id="quoteDisplay">
+  <p id="quote">Click the button to get a random quote!</p>
+  <p id="author"></p>
+</div>
+
+<button id="newQuoteBtn">Get New Quote</button>
+
+<!-- Social media share buttons -->
+<div class="social-buttons">
+  <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20quote:%20&url=http://example.com" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Twitter_Logo_2021.svg/2560px-Twitter_Logo_2021.svg.png" alt="Share on Twitter">
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://example.com" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Share on Facebook">
+  </a>
+  <a href="https://api.whatsapp.com/send?text=Check%20out%20this%20quote%3A%20&url=http://example.com" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/WhatsApp_Logo.svg" alt="Share on WhatsApp">
+  </a>
+</div>
+
+<script>
+// Function to fetch a random quote
+function fetchQuote() {
+  // Show loading message while fetching
+  const quoteElement = document.getElementById('quote');
+  const authorElement = document.getElementById('author');
+  quoteElement.textContent = 'Loading quote...';
+  authorElement.textContent = '';
+
+  // Fetch all quotes from the DummyJSON API
+  fetch('https://dummyjson.com/quotes')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Get a random quote from the list of quotes
+      const randomIndex = Math.floor(Math.random() * data.quotes.length);
+      const randomQuote = data.quotes[randomIndex];
+
+      // Display the quote and author
+      quoteElement.textContent = `"${randomQuote.quote}"`;
+      authorElement.textContent = `- ${randomQuote.author}`;
+    })
+    .catch(error => {
+      // Handle any errors that occur during the fetch
+      console.error('Error fetching quote:', error);
+      quoteElement.textContent = 'Failed to load quote. Please try again.';
+      authorElement.textContent = '';
+    });
+}
+
+// Fetch a quote when the button is clicked
+document.getElementById('newQuoteBtn').addEventListener('click', fetchQuote);
+
+// Fetch a quote when the page loads
+fetchQuote();
+</script>
+
+</body>
+</html>
